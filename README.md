@@ -30,8 +30,7 @@ The system helps detect price changes early and avoids duplicate alerts by maint
   - GitHub Actions workflow running on a scheduled interval
 ### Project Structure
 
-RentTracker/
-
+    RentTracker/
     │
     ├── tracker.py               # Main script
     ├── requirements.txt         # Dependencies
