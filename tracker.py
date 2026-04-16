@@ -43,8 +43,18 @@ def send_email_alert(message):
 def fetch_data():
     try:
         print("🌐 Fetching API...")
-        r = requests.get(URL, timeout=10)
+
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36",
+            "Accept": "application/json, text/javascript, */*; q=0.01",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Referer": "https://www.liveparksideapartments.com/floor-plans/",
+            "Origin": "https://www.liveparksideapartments.com"
+        }
+
+        r = requests.get(URL, headers=headers, timeout=10)
         r.raise_for_status()
+
         print("✅ API response received")
         return r.json()
 
