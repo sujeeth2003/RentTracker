@@ -4,9 +4,9 @@ import requests
 import smtplib
 from email.mime.text import MIMEText
 from datetime import datetime
-
-import gspread
+import json
 from google.oauth2.service_account import Credentials
+import gspread
 
 print("🚀 SCRIPT STARTED")
 
@@ -34,7 +34,11 @@ def init_sheet():
         "https://www.googleapis.com/auth/drive"
     ]
 
-    creds = Credentials.from_service_account_file(GOOGLE_CREDS_FILE, scopes=scope)
+
+
+    creds_json = json.loads(os.getenv("GOOGLE_CREDS_JSON"))
+
+    creds = Credentials.from_service_account_info(creds_json, scopes=scope)
     client = gspread.authorize(creds)
 
     sheet = client.open(GOOGLE_SHEET_NAME).sheet1
