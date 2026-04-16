@@ -27,3 +27,12 @@ def send_email_alert(message):
 
 
 # ------------------ FETCH ------------------
+def fetch_data():
+    headers = {
+        "User-Agent": "Mozilla/5.0",
+        "Accept": "application/json"
+    }
+    return requests.get(URL, headers=headers).json()
+
+
+# ------------------ EXTRACT ------------------
