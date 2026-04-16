@@ -5,21 +5,57 @@ import smtplib
 from email.mime.text import MIMEText
 from datetime import datetime
 
-print("SCRIPT STARTED")
+import gspread
+from google.oauth2.service_account import Credentials
+
+print("🚀 SCRIPT STARTED")
 
 # ---------------- CONFIG ----------------
 URL = "https://www.liveparksideapartments.com/wp-json/theme/entrata/v1/floor-plans"
 THRESHOLD = 700
-STATE_FILE = "state.json"
 
 EMAIL = os.getenv("EMAIL")
 APP_PASSWORD = os.getenv("APP_PASSWORD")
 
+GOOGLE_SHEET_NAME = "Rent Tracker"
+GOOGLE_CREDS_FILE = "credentials.json"
+
 if not EMAIL or not APP_PASSWORD:
-    print("Missing EMAIL or APP_PASSWORD environment variables")
+    print("❌ Missing EMAIL or APP_PASSWORD env variables")
     exit(1)
 
-print("Environment variables loaded")
+print("✅ Environment variables loaded")
+
+
+# ---------------- GOOGLE SHEETS ----------------
+def init_sheet():
+    scope = [
+        "https://www.googleapis.com/auth/spreadsheets",
+        "https://www.googleapis.com/auth/drive"
+    ]
+
+    creds = Credentials.from_service_account_file(GOOGLE_CREDS_FILE, scopes=scope)
+    client = gspread.authorize(creds)
+
+    sheet = client.open(GOOGLE_SHEET_NAME).sheet1
+    return sheet
+
+
+def log_to_sheet(plan, price, status):
+    try:
+        sheet = init_sheet()
+
+        sheet.append_row([
+            str(datetime.now()),
+            plan,
+            price,
+            status
+        ])
+
+        print("📊 Logged to Google Sheets")
+
+    except Exception as e:
+        print("❌ Google Sheets logging failed:", e)
 
 
 # ---------------- EMAIL ----------------
@@ -34,30 +70,33 @@ def send_email_alert(message):
             server.login(EMAIL, APP_PASSWORD)
             server.send_message(msg)
 
-        print("Email sent")
+        print("📧 Email sent successfully")
 
     except Exception as e:
-        print("Email error:", e)
+        print("❌ Email failed:", e)
 
 
-# ---------------- FETCH ----------------
+# ---------------- FETCH DATA ----------------
 def fetch_data():
     try:
-        print("Fetching API...")
+        print("🌐 Fetching API...")
 
         headers = {
-            "User-Agent": "Mozilla/5.0",
-            "Accept": "application/json",
-            "Referer": "https://www.liveparksideapartments.com/floor-plans/"
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36",
+            "Accept": "application/json, text/javascript, */*; q=0.01",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Referer": "https://www.liveparksideapartments.com/floor-plans/",
+            "Origin": "https://www.liveparksideapartments.com"
         }
 
         r = requests.get(URL, headers=headers, timeout=10)
         r.raise_for_status()
 
+        print("✅ API response received")
         return r.json()
 
     except Exception as e:
-        print("API fetch error:", e)
+        print("❌ API fetch error:", e)
         return None
 
 
@@ -69,7 +108,7 @@ def safe_int(x):
         return None
 
 
-# ---------------- EXTRACT ----------------
+# ---------------- EXTRACT LOWEST PRICE ----------------
 def get_lowest_price(data):
     lowest = None
     best_plan = None
@@ -86,9 +125,9 @@ def get_lowest_price(data):
                 price = safe_int(rate.get("value"))
                 special = safe_int(rate.get("special_value"))
 
-                final_price = special if special is not None else price
+                final_price = special if special else price
 
-                if final_price is not None:
+                if final_price:
                     if lowest is None or final_price < lowest:
                         lowest = final_price
                         best_plan = f"{category} - {name}"
@@ -96,59 +135,46 @@ def get_lowest_price(data):
     return lowest, best_plan
 
 
-# ---------------- STATE ----------------
-def load_state():
-    if not os.path.exists(STATE_FILE):
-        return {"lowest_seen": None, "last_alerted": None}
-
-    try:
-        with open(STATE_FILE, "r") as f:
-            return json.load(f)
-    except:
-        return {"lowest_seen": None, "last_alerted": None}
-
-
-def save_state(state):
-    with open(STATE_FILE, "w") as f:
-        json.dump(state, f)
-
-
 # ---------------- MAIN ----------------
 def main():
     data = fetch_data()
-
     if not data:
-        print("No data received")
+        print("❌ No data, exiting")
         return
 
     current_lowest, plan = get_lowest_price(data)
 
-    print(f"Current lowest: {current_lowest} | Plan: {plan}")
+    print(f"📊 Current lowest: {current_lowest} | Plan: {plan}")
 
     if current_lowest is None:
-        print("No valid price found")
+        print("❌ No valid price found")
         return
 
-    state = load_state()
+    state_file = "state.json"
+
+    try:
+        with open(state_file, "r") as f:
+            state = json.load(f)
+    except:
+        state = {"lowest_seen": None, "last_alerted": None}
+
     lowest_seen = state.get("lowest_seen")
     last_alerted = state.get("last_alerted")
 
-    print(f"Lowest seen: {lowest_seen}")
-    print(f"Last alerted: {last_alerted}")
+    print(f"📌 Lowest seen: {lowest_seen}")
+    print(f"📌 Last alerted: {last_alerted}")
 
-    # update lowest seen
     if lowest_seen is None or current_lowest < lowest_seen:
         lowest_seen = current_lowest
 
     alert_sent = False
 
-    # alert condition
     if current_lowest < THRESHOLD:
         if last_alerted is None or current_lowest < last_alerted:
-            print("New alert triggered")
+            print("🚨 New alert triggered!")
 
             message = f"""
-Rent Price Alert
+Rent Price Alert 🚨
 
 Plan: {plan}
 Price: ${current_lowest}
@@ -161,20 +187,25 @@ Time: {datetime.now()}
             last_alerted = current_lowest
             alert_sent = True
         else:
-            print("Already alerted for this price level")
+            print("ℹ️ Already alerted for this price level")
     else:
-        print("Price above threshold")
+        print("ℹ️ Price above threshold")
+
+    # ---------------- LOG TO GOOGLE SHEETS ----------------
+    status = "ALERT" if alert_sent else "NORMAL"
+    log_to_sheet(plan, current_lowest, status)
 
     # save state
-    save_state({
-        "lowest_seen": lowest_seen,
-        "last_alerted": last_alerted
-    })
+    with open(state_file, "w") as f:
+        json.dump(
+            {
+                "lowest_seen": lowest_seen,
+                "last_alerted": last_alerted,
+            },
+            f,
+        )
 
-    print("State updated")
-
-    if not alert_sent:
-        print("No alert sent this run")
+    print("💾 State updated")
 
 
 if __name__ == "__main__":
