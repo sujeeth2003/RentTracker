@@ -3,38 +3,54 @@ import json
 import requests
 import smtplib
 from email.mime.text import MIMEText
+from datetime import datetime
 
+print("🚀 SCRIPT STARTED")
+
+# ---------------- CONFIG ----------------
 URL = "https://www.liveparksideapartments.com/wp-json/theme/entrata/v1/floor-plans"
 THRESHOLD = 700
 
 EMAIL = os.getenv("EMAIL")
 APP_PASSWORD = os.getenv("APP_PASSWORD")
 
-STATE_FILE = "state.json"
+if not EMAIL or not APP_PASSWORD:
+    print("❌ Missing EMAIL or APP_PASSWORD env variables")
+    exit(1)
+
+print("✅ Environment variables loaded")
 
 
 # ---------------- EMAIL ----------------
 def send_email_alert(message):
-    msg = MIMEText(message)
-    msg["Subject"] = "Rent Price Alert"
-    msg["From"] = EMAIL
-    msg["To"] = EMAIL
+    try:
+        msg = MIMEText(message)
+        msg["Subject"] = "Rent Price Alert"
+        msg["From"] = EMAIL
+        msg["To"] = EMAIL
 
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-        server.login(EMAIL, APP_PASSWORD)
-        server.send_message(msg)
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+            server.login(EMAIL, APP_PASSWORD)
+            server.send_message(msg)
+
+        print("📧 Email sent successfully")
+
+    except Exception as e:
+        print("❌ Email failed:", e)
 
 
-# ---------------- FETCH ----------------
+# ---------------- FETCH DATA ----------------
 def fetch_data():
-    headers = {
-        "User-Agent": "Mozilla/5.0",
-        "Accept": "application/json"
-    }
+    try:
+        print("🌐 Fetching API...")
+        r = requests.get(URL, timeout=10)
+        r.raise_for_status()
+        print("✅ API response received")
+        return r.json()
 
-    r = requests.get(URL, headers=headers, timeout=10)
-    r.raise_for_status()
-    return r.json()
+    except Exception as e:
+        print("❌ API fetch error:", e)
+        return None
 
 
 # ---------------- SAFE INT ----------------
@@ -45,7 +61,7 @@ def safe_int(x):
         return None
 
 
-# ---------------- EXTRACT ----------------
+# ---------------- EXTRACT LOWEST PRICE ----------------
 def get_lowest_price(data):
     lowest = None
     best_plan = None
@@ -72,64 +88,73 @@ def get_lowest_price(data):
     return lowest, best_plan
 
 
-# ---------------- STATE (GitHub-safe) ----------------
-def load_state():
-    try:
-        return json.load(open(STATE_FILE))
-    except:
-        return {
-            "lowest_seen": None,
-            "last_alerted": None
-        }
-
-
-def save_state(state):
-    with open(STATE_FILE, "w") as f:
-        json.dump(state, f)
-
-
 # ---------------- MAIN ----------------
 def main():
     data = fetch_data()
+    if not data:
+        print("❌ No data, exiting")
+        return
+
     current_lowest, plan = get_lowest_price(data)
 
-    state = load_state()
+    print(f"📊 Current lowest: {current_lowest} | Plan: {plan}")
+
+    if current_lowest is None:
+        print("❌ No valid price found")
+        return
+
+    # Load state from GitHub runner (NOT persistent across runs, but OK for logic)
+    state_file = "state.json"
+
+    try:
+        with open(state_file, "r") as f:
+            state = json.load(f)
+    except:
+        state = {"lowest_seen": None, "last_alerted": None}
+
     lowest_seen = state.get("lowest_seen")
     last_alerted = state.get("last_alerted")
 
-    print("Current:", current_lowest)
-    print("Lowest seen:", lowest_seen)
-    print("Last alerted:", last_alerted)
-
-    if current_lowest is None:
-        print("No price found")
-        return
+    print(f"📌 Lowest seen: {lowest_seen}")
+    print(f"📌 Last alerted: {last_alerted}")
 
     # update lowest seen
     if lowest_seen is None or current_lowest < lowest_seen:
         lowest_seen = current_lowest
 
-    # alert condition
+    # alert logic
     if current_lowest < THRESHOLD:
         if last_alerted is None or current_lowest < last_alerted:
+            print("🚨 New alert triggered!")
+
             message = f"""
-New rent opportunity detected!
+Rent Price Alert 🚨
 
 Plan: {plan}
 Price: ${current_lowest}
+Threshold: {THRESHOLD}
 Lowest Seen: {lowest_seen}
-Previous Alert: {last_alerted}
+Time: {datetime.now()}
 """
+
             send_email_alert(message)
             last_alerted = current_lowest
         else:
-            print("Already alerted for this level")
+            print("ℹ️ Already alerted for this price level")
+    else:
+        print("ℹ️ Price above threshold")
 
-    # always persist state
-    save_state({
-        "lowest_seen": lowest_seen,
-        "last_alerted": last_alerted
-    })
+    # save state (for same-run tracking only)
+    with open(state_file, "w") as f:
+        json.dump(
+            {
+                "lowest_seen": lowest_seen,
+                "last_alerted": last_alerted,
+            },
+            f,
+        )
+
+    print("💾 State updated")
 
 
 if __name__ == "__main__":
