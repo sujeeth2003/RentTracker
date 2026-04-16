@@ -5,20 +5,21 @@ import smtplib
 from email.mime.text import MIMEText
 from datetime import datetime
 
-print("🚀 SCRIPT STARTED")
+print("SCRIPT STARTED")
 
 # ---------------- CONFIG ----------------
 URL = "https://www.liveparksideapartments.com/wp-json/theme/entrata/v1/floor-plans"
 THRESHOLD = 700
+STATE_FILE = "state.json"
 
 EMAIL = os.getenv("EMAIL")
 APP_PASSWORD = os.getenv("APP_PASSWORD")
 
 if not EMAIL or not APP_PASSWORD:
-    print("❌ Missing EMAIL or APP_PASSWORD env variables")
+    print("Missing EMAIL or APP_PASSWORD environment variables")
     exit(1)
 
-print("✅ Environment variables loaded")
+print("Environment variables loaded")
 
 
 # ---------------- EMAIL ----------------
@@ -33,33 +34,30 @@ def send_email_alert(message):
             server.login(EMAIL, APP_PASSWORD)
             server.send_message(msg)
 
-        print("📧 Email sent successfully")
+        print("Email sent")
 
     except Exception as e:
-        print("❌ Email failed:", e)
+        print("Email error:", e)
 
 
-# ---------------- FETCH DATA ----------------
+# ---------------- FETCH ----------------
 def fetch_data():
     try:
-        print("🌐 Fetching API...")
+        print("Fetching API...")
 
         headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36",
-            "Accept": "application/json, text/javascript, */*; q=0.01",
-            "Accept-Language": "en-US,en;q=0.9",
-            "Referer": "https://www.liveparksideapartments.com/floor-plans/",
-            "Origin": "https://www.liveparksideapartments.com"
+            "User-Agent": "Mozilla/5.0",
+            "Accept": "application/json",
+            "Referer": "https://www.liveparksideapartments.com/floor-plans/"
         }
 
         r = requests.get(URL, headers=headers, timeout=10)
         r.raise_for_status()
 
-        print("✅ API response received")
         return r.json()
 
     except Exception as e:
-        print("❌ API fetch error:", e)
+        print("API fetch error:", e)
         return None
 
 
@@ -71,7 +69,7 @@ def safe_int(x):
         return None
 
 
-# ---------------- EXTRACT LOWEST PRICE ----------------
+# ---------------- EXTRACT ----------------
 def get_lowest_price(data):
     lowest = None
     best_plan = None
@@ -88,9 +86,9 @@ def get_lowest_price(data):
                 price = safe_int(rate.get("value"))
                 special = safe_int(rate.get("special_value"))
 
-                final_price = special if special else price
+                final_price = special if special is not None else price
 
-                if final_price:
+                if final_price is not None:
                     if lowest is None or final_price < lowest:
                         lowest = final_price
                         best_plan = f"{category} - {name}"
@@ -98,47 +96,59 @@ def get_lowest_price(data):
     return lowest, best_plan
 
 
+# ---------------- STATE ----------------
+def load_state():
+    if not os.path.exists(STATE_FILE):
+        return {"lowest_seen": None, "last_alerted": None}
+
+    try:
+        with open(STATE_FILE, "r") as f:
+            return json.load(f)
+    except:
+        return {"lowest_seen": None, "last_alerted": None}
+
+
+def save_state(state):
+    with open(STATE_FILE, "w") as f:
+        json.dump(state, f)
+
+
 # ---------------- MAIN ----------------
 def main():
     data = fetch_data()
+
     if not data:
-        print("❌ No data, exiting")
+        print("No data received")
         return
 
     current_lowest, plan = get_lowest_price(data)
 
-    print(f"📊 Current lowest: {current_lowest} | Plan: {plan}")
+    print(f"Current lowest: {current_lowest} | Plan: {plan}")
 
     if current_lowest is None:
-        print("❌ No valid price found")
+        print("No valid price found")
         return
 
-    # Load state from GitHub runner (NOT persistent across runs, but OK for logic)
-    state_file = "state.json"
-
-    try:
-        with open(state_file, "r") as f:
-            state = json.load(f)
-    except:
-        state = {"lowest_seen": None, "last_alerted": None}
-
+    state = load_state()
     lowest_seen = state.get("lowest_seen")
     last_alerted = state.get("last_alerted")
 
-    print(f"📌 Lowest seen: {lowest_seen}")
-    print(f"📌 Last alerted: {last_alerted}")
+    print(f"Lowest seen: {lowest_seen}")
+    print(f"Last alerted: {last_alerted}")
 
     # update lowest seen
     if lowest_seen is None or current_lowest < lowest_seen:
         lowest_seen = current_lowest
 
-    # alert logic
+    alert_sent = False
+
+    # alert condition
     if current_lowest < THRESHOLD:
         if last_alerted is None or current_lowest < last_alerted:
-            print("🚨 New alert triggered!")
+            print("New alert triggered")
 
             message = f"""
-Rent Price Alert 🚨
+Rent Price Alert
 
 Plan: {plan}
 Price: ${current_lowest}
@@ -149,22 +159,22 @@ Time: {datetime.now()}
 
             send_email_alert(message)
             last_alerted = current_lowest
+            alert_sent = True
         else:
-            print("ℹ️ Already alerted for this price level")
+            print("Already alerted for this price level")
     else:
-        print("ℹ️ Price above threshold")
+        print("Price above threshold")
 
-    # save state (for same-run tracking only)
-    with open(state_file, "w") as f:
-        json.dump(
-            {
-                "lowest_seen": lowest_seen,
-                "last_alerted": last_alerted,
-            },
-            f,
-        )
+    # save state
+    save_state({
+        "lowest_seen": lowest_seen,
+        "last_alerted": last_alerted
+    })
 
-    print("💾 State updated")
+    print("State updated")
+
+    if not alert_sent:
+        print("No alert sent this run")
 
 
 if __name__ == "__main__":
