@@ -4,7 +4,7 @@ import requests
 import smtplib
 from email.mime.text import MIMEText
 from datetime import datetime
-import json
+
 from google.oauth2.service_account import Credentials
 import gspread
 
@@ -18,7 +18,6 @@ EMAIL = os.getenv("EMAIL")
 APP_PASSWORD = os.getenv("APP_PASSWORD")
 
 GOOGLE_SHEET_NAME = "Rent Tracker"
-GOOGLE_CREDS_FILE = "credentials.json"
 
 if not EMAIL or not APP_PASSWORD:
     print("❌ Missing EMAIL or APP_PASSWORD env variables")
@@ -34,13 +33,10 @@ def init_sheet():
         "https://www.googleapis.com/auth/drive"
     ]
 
-
-
     creds_json = json.loads(os.getenv("GOOGLE_CREDS_JSON"))
-
     creds = Credentials.from_service_account_info(creds_json, scopes=scope)
-    client = gspread.authorize(creds)
 
+    client = gspread.authorize(creds)
     sheet = client.open(GOOGLE_SHEET_NAME).sheet1
     return sheet
 
@@ -48,18 +44,41 @@ def init_sheet():
 def log_to_sheet(plan, price, status):
     try:
         sheet = init_sheet()
-
         sheet.append_row([
             str(datetime.now()),
             plan,
             price,
             status
         ])
-
         print("📊 Logged to Google Sheets")
-
     except Exception as e:
         print("❌ Google Sheets logging failed:", e)
+
+
+def get_history_low(sheet):
+    """
+    Reads all prices from sheet and finds historical lowest price.
+    Column format:
+    0 timestamp | 1 plan | 2 price | 3 status
+    """
+    try:
+        records = sheet.get_all_values()
+
+        if len(records) <= 1:
+            return None  # only header or empty
+
+        prices = []
+        for row in records[1:]:
+            try:
+                prices.append(int(row[2]))
+            except:
+                continue
+
+        return min(prices) if prices else None
+
+    except Exception as e:
+        print("❌ Failed reading sheet history:", e)
+        return None
 
 
 # ---------------- EMAIL ----------------
@@ -86,9 +105,8 @@ def fetch_data():
         print("🌐 Fetching API...")
 
         headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36",
-            "Accept": "application/json, text/javascript, */*; q=0.01",
-            "Accept-Language": "en-US,en;q=0.9",
+            "User-Agent": "Mozilla/5.0",
+            "Accept": "application/json",
             "Referer": "https://www.liveparksideapartments.com/floor-plans/",
             "Origin": "https://www.liveparksideapartments.com"
         }
@@ -141,6 +159,8 @@ def get_lowest_price(data):
 
 # ---------------- MAIN ----------------
 def main():
+    sheet = init_sheet()
+
     data = fetch_data()
     if not data:
         print("❌ No data, exiting")
@@ -154,28 +174,18 @@ def main():
         print("❌ No valid price found")
         return
 
-    state_file = "state.json"
+    # ---------------- GET HISTORICAL LOW ----------------
+    historical_low = get_history_low(sheet)
 
-    try:
-        with open(state_file, "r") as f:
-            state = json.load(f)
-    except:
-        state = {"lowest_seen": None, "last_alerted": None}
-
-    lowest_seen = state.get("lowest_seen")
-    last_alerted = state.get("last_alerted")
-
-    print(f"📌 Lowest seen: {lowest_seen}")
-    print(f"📌 Last alerted: {last_alerted}")
-
-    if lowest_seen is None or current_lowest < lowest_seen:
-        lowest_seen = current_lowest
+    print(f"📌 Historical lowest (sheet): {historical_low}")
 
     alert_sent = False
 
-    if current_lowest < THRESHOLD:
-        if last_alerted is None or current_lowest < last_alerted:
-            print("🚨 New alert triggered!")
+    # ---------------- ALERT LOGIC ----------------
+    if historical_low is None or current_lowest < historical_low:
+
+        if current_lowest < THRESHOLD:
+            print("🚨 New ALL-TIME LOW detected!")
 
             message = f"""
 Rent Price Alert 🚨
@@ -183,33 +193,21 @@ Rent Price Alert 🚨
 Plan: {plan}
 Price: ${current_lowest}
 Threshold: {THRESHOLD}
-Lowest Seen: {lowest_seen}
+Previous Lowest (Sheet): {historical_low}
 Time: {datetime.now()}
 """
 
             send_email_alert(message)
-            last_alerted = current_lowest
             alert_sent = True
-        else:
-            print("ℹ️ Already alerted for this price level")
-    else:
-        print("ℹ️ Price above threshold")
 
-    # ---------------- LOG TO GOOGLE SHEETS ----------------
+    else:
+        print("ℹ️ No new lowest price")
+
+    # ---------------- LOG ALWAYS ----------------
     status = "ALERT" if alert_sent else "NORMAL"
     log_to_sheet(plan, current_lowest, status)
 
-    # save state
-    with open(state_file, "w") as f:
-        json.dump(
-            {
-                "lowest_seen": lowest_seen,
-                "last_alerted": last_alerted,
-            },
-            f,
-        )
-
-    print("💾 State updated")
+    print("💾 Done")
 
 
 if __name__ == "__main__":
