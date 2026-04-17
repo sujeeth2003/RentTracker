@@ -1,0 +1,15 @@
+name: Rent Tracker
+
+on:
+  schedule:
+    - cron: "0 * * * *"   # every hour
+  workflow_dispatch:
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
