@@ -66,3 +66,11 @@ def get_lowest_price(data):
 
 
 # ------------------ STATE ------------------
+def load_state():
+    try:
+        with open(STATE_FILE, "r") as f:
+            return json.load(f)
+    except:
+        return {"lowest": None}
+
+
