@@ -95,3 +95,17 @@ def main():
             message = f"""
 New lowest rent detected!
 
+Plan: {plan}
+Price: ${current_lowest}
+Previous Lowest: {prev_lowest}
+"""
+            send_email_alert(message)
+            save_state(current_lowest)
+        else:
+            print("No new lower price")
+    else:
+        print("Threshold not met")
+
+
+if __name__ == "__main__":
+    main()
