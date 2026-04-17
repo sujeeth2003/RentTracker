@@ -80,3 +80,18 @@ def save_state(lowest):
 
 
 # ------------------ MAIN ------------------
+def main():
+    data = fetch_data()
+    current_lowest, plan = get_lowest_price(data)
+
+    state = load_state()
+    prev_lowest = state.get("lowest")
+
+    print("Current:", current_lowest, "| Previous:", prev_lowest)
+
+    # 🔴 alert condition
+    if current_lowest and current_lowest < THRESHOLD:
+        if prev_lowest is None or current_lowest < prev_lowest:
+            message = f"""
+New lowest rent detected!
+
