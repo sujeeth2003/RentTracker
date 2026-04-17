@@ -36,3 +36,19 @@ def fetch_data():
 
 
 # ------------------ EXTRACT ------------------
+def get_lowest_price(data):
+    lowest = None
+    best_plan = None
+
+    for category, cat_data in data.get("categories", {}).items():
+        for plan in cat_data.get("floorplans", []):
+
+            if plan.get("sold_out"):
+                continue
+
+            name = plan.get("name")
+
+            for rate in plan.get("rates", []):
+                price = rate.get("value")
+                special = rate.get("special_value")
+
