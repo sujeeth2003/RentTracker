@@ -13,7 +13,7 @@ APP_PASSWORD = os.getenv("APP_PASSWORD")
 STATE_FILE = "state.json"
 
 
-# ------------------ EMAIL ------------------
+# ---------------- EMAIL ----------------
 def send_email_alert(message):
     msg = MIMEText(message)
     msg["Subject"] = "Rent Price Alert"
