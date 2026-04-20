@@ -37,7 +37,15 @@ def fetch_data():
     return r.json()
 
 
-# ------------------ EXTRACT ------------------
+# ---------------- SAFE INT ----------------
+def safe_int(x):
+    try:
+        return int(x)
+    except:
+        return None
+
+
+# ---------------- EXTRACT ----------------
 def get_lowest_price(data):
     lowest = None
     best_plan = None
