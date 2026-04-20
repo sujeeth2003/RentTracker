@@ -31,7 +31,10 @@ def fetch_data():
         "User-Agent": "Mozilla/5.0",
         "Accept": "application/json"
     }
-    return requests.get(URL, headers=headers).json()
+
+    r = requests.get(URL, headers=headers, timeout=10)
+    r.raise_for_status()
+    return r.json()
 
 
 # ------------------ EXTRACT ------------------
