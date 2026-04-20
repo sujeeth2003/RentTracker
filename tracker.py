@@ -1,7 +1,6 @@
 import os
 import json
 import requests
-import json
 import smtplib
 from email.mime.text import MIMEText
 
