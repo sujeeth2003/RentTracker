@@ -25,7 +25,7 @@ def send_email_alert(message):
         server.send_message(msg)
 
 
-# ------------------ FETCH ------------------
+# ---------------- FETCH ----------------
 def fetch_data():
     headers = {
         "User-Agent": "Mozilla/5.0",
