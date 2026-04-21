@@ -97,7 +97,9 @@ def main():
     lowest_seen = state.get("lowest_seen")
     last_alerted = state.get("last_alerted")
 
-    print("Current:", current_lowest, "| Previous:", prev_lowest)
+    print("Current:", current_lowest)
+    print("Lowest seen:", lowest_seen)
+    print("Last alerted:", last_alerted)
 
     # 🔴 alert condition
     if current_lowest and current_lowest < THRESHOLD:
