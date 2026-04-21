@@ -14,7 +14,11 @@ THRESHOLD = 700
 EMAIL = os.getenv("EMAIL")
 APP_PASSWORD = os.getenv("APP_PASSWORD")
 
-STATE_FILE = "state.json"
+if not EMAIL or not APP_PASSWORD:
+    print("❌ Missing EMAIL or APP_PASSWORD env variables")
+    exit(1)
+
+print("✅ Environment variables loaded")
 
 
 # ---------------- EMAIL ----------------
