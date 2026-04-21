@@ -117,7 +117,8 @@ New rent opportunity detected!
 
 Plan: {plan}
 Price: ${current_lowest}
-Previous Lowest: {prev_lowest}
+Lowest Seen: {lowest_seen}
+Previous Alert: {last_alerted}
 """
             send_email_alert(message)
             save_state(current_lowest)
