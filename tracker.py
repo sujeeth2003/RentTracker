@@ -94,7 +94,8 @@ def main():
     current_lowest, plan = get_lowest_price(data)
 
     state = load_state()
-    prev_lowest = state.get("lowest")
+    lowest_seen = state.get("lowest_seen")
+    last_alerted = state.get("last_alerted")
 
     print("Current:", current_lowest, "| Previous:", prev_lowest)
 
