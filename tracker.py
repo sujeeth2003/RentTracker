@@ -59,11 +59,8 @@ def get_lowest_price(data):
             name = plan.get("name")
 
             for rate in plan.get("rates", []):
-                price = rate.get("value")
-                special = rate.get("special_value")
-
-                price = int(price) if price else None
-                special = int(special) if special else None
+                price = safe_int(rate.get("value"))
+                special = safe_int(rate.get("special_value"))
 
                 final_price = special if special else price
 
