@@ -85,7 +85,7 @@ def load_state():
 
 def save_state(state):
     with open(STATE_FILE, "w") as f:
-        json.dump({"lowest": lowest}, f)
+        json.dump(state, f)
 
 
 # ------------------ MAIN ------------------
