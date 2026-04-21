@@ -123,9 +123,13 @@ Previous Alert: {last_alerted}
             send_email_alert(message)
             last_alerted = current_lowest
         else:
-            print("No new lower price")
-    else:
-        print("Threshold not met")
+            print("Already alerted for this level")
+
+    # always persist state
+    save_state({
+        "lowest_seen": lowest_seen,
+        "last_alerted": last_alerted
+    })
 
 
 if __name__ == "__main__":
