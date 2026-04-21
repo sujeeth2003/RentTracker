@@ -113,7 +113,7 @@ def main():
     if current_lowest < THRESHOLD:
         if last_alerted is None or current_lowest < last_alerted:
             message = f"""
-New lowest rent detected!
+New rent opportunity detected!
 
 Plan: {plan}
 Price: ${current_lowest}
