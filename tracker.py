@@ -3,6 +3,7 @@ import json
 import requests
 import smtplib
 from email.mime.text import MIMEText
+from datetime import datetime
 
 URL = "https://www.liveparksideapartments.com/wp-json/theme/entrata/v1/floor-plans"
 THRESHOLD = 700
