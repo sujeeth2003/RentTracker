@@ -1,4 +1,4 @@
-name: Rent Tracker
+name: Test Run
 
 on:
   schedule:
