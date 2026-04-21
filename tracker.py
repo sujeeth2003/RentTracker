@@ -77,7 +77,10 @@ def load_state():
     try:
         return json.load(open(STATE_FILE))
     except:
-        return {"lowest": None}
+        return {
+            "lowest_seen": None,
+            "last_alerted": None
+        }
 
 
 def save_state(lowest):
