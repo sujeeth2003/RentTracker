@@ -101,9 +101,17 @@ def main():
     print("Lowest seen:", lowest_seen)
     print("Last alerted:", last_alerted)
 
-    # 🔴 alert condition
-    if current_lowest and current_lowest < THRESHOLD:
-        if prev_lowest is None or current_lowest < prev_lowest:
+    if current_lowest is None:
+        print("No price found")
+        return
+
+    # update lowest seen
+    if lowest_seen is None or current_lowest < lowest_seen:
+        lowest_seen = current_lowest
+
+    # alert condition
+    if current_lowest < THRESHOLD:
+        if last_alerted is None or current_lowest < last_alerted:
             message = f"""
 New lowest rent detected!
 
