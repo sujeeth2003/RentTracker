@@ -72,7 +72,7 @@ def get_lowest_price(data):
     return lowest, best_plan
 
 
-# ------------------ STATE ------------------
+# ---------------- STATE (GitHub-safe) ----------------
 def load_state():
     try:
         with open(STATE_FILE, "r") as f:
