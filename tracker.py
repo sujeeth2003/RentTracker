@@ -88,7 +88,7 @@ def save_state(state):
         json.dump(state, f)
 
 
-# ------------------ MAIN ------------------
+# ---------------- MAIN ----------------
 def main():
     data = fetch_data()
     current_lowest, plan = get_lowest_price(data)
