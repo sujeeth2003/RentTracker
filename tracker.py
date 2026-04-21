@@ -39,7 +39,7 @@ def send_email_alert(message):
         print("❌ Email failed:", e)
 
 
-# ---------------- FETCH ----------------
+# ---------------- FETCH DATA ----------------
 def fetch_data():
     headers = {
         "User-Agent": "Mozilla/5.0",
