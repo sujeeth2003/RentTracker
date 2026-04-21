@@ -121,7 +121,7 @@ Lowest Seen: {lowest_seen}
 Previous Alert: {last_alerted}
 """
             send_email_alert(message)
-            save_state(current_lowest)
+            last_alerted = current_lowest
         else:
             print("No new lower price")
     else:
