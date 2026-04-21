@@ -75,8 +75,7 @@ def get_lowest_price(data):
 # ---------------- STATE (GitHub-safe) ----------------
 def load_state():
     try:
-        with open(STATE_FILE, "r") as f:
-            return json.load(f)
+        return json.load(open(STATE_FILE))
     except:
         return {"lowest": None}
 
