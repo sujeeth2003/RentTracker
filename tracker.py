@@ -37,7 +37,7 @@ def send_email_alert(message):
         print("Email sent")
 
     except Exception as e:
-        print("❌ Email failed:", e)
+        print("Email error:", e)
 
 
 # ---------------- FETCH DATA ----------------
