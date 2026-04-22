@@ -41,10 +41,12 @@ def send_email_alert(message):
 
 # ---------------- FETCH DATA ----------------
 def fetch_data():
-    headers = {
-        "User-Agent": "Mozilla/5.0",
-        "Accept": "application/json"
-    }
+    try:
+        print("🌐 Fetching API...")
+        r = requests.get(URL, timeout=10)
+        r.raise_for_status()
+        print("✅ API response received")
+        return r.json()
 
     r = requests.get(URL, headers=headers, timeout=10)
     r.raise_for_status()
