@@ -54,6 +54,7 @@ def fetch_data():
 
         r = requests.get(URL, headers=headers, timeout=10)
         r.raise_for_status()
+
         print("✅ API response received")
         return r.json()
 
