@@ -1,4 +1,4 @@
-name: Test Run
+name: Rent Tracker
 
 on:
   workflow_dispatch:
