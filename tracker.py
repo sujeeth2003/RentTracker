@@ -34,7 +34,7 @@ def send_email_alert(message):
             server.login(EMAIL, APP_PASSWORD)
             server.send_message(msg)
 
-        print("📧 Email sent successfully")
+        print("Email sent")
 
     except Exception as e:
         print("❌ Email failed:", e)
