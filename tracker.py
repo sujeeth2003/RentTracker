@@ -16,7 +16,7 @@ EMAIL = os.getenv("EMAIL")
 APP_PASSWORD = os.getenv("APP_PASSWORD")
 
 if not EMAIL or not APP_PASSWORD:
-    print("❌ Missing EMAIL or APP_PASSWORD env variables")
+    print("Missing EMAIL or APP_PASSWORD environment variables")
     exit(1)
 
 print("✅ Environment variables loaded")
