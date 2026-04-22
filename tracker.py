@@ -122,7 +122,7 @@ def main():
     if lowest_seen is None or current_lowest < lowest_seen:
         lowest_seen = current_lowest
 
-    # alert condition
+    # alert logic
     if current_lowest < THRESHOLD:
         if last_alerted is None or current_lowest < last_alerted:
             message = f"""
