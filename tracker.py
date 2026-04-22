@@ -140,7 +140,9 @@ Time: {datetime.now()}
             send_email_alert(message)
             last_alerted = current_lowest
         else:
-            print("Already alerted for this level")
+            print("ℹ️ Already alerted for this price level")
+    else:
+        print("ℹ️ Price above threshold")
 
     # always persist state
     save_state({
