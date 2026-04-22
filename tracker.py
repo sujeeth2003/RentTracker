@@ -19,7 +19,7 @@ if not EMAIL or not APP_PASSWORD:
     print("Missing EMAIL or APP_PASSWORD environment variables")
     exit(1)
 
-print("✅ Environment variables loaded")
+print("Environment variables loaded")
 
 
 # ---------------- EMAIL ----------------
