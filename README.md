@@ -28,3 +28,16 @@ The system helps detect price changes early and avoids duplicate alerts by maint
   - Email notifications sent via SMTP (Gmail)
   - Scheduler
   - GitHub Actions workflow running on a scheduled interval
+### Project Structure
+
+RentTracker/
+
+    │
+    ├── tracker.py               # Main script
+    ├── requirements.txt         # Dependencies
+    ├── state.json               # Local execution state (runtime generated)
+    │
+    └── .github/
+        └── workflows/
+            └── run.yml          # GitHub Actions workflow
+
