@@ -115,13 +115,8 @@ def main():
     lowest_seen = state.get("lowest_seen")
     last_alerted = state.get("last_alerted")
 
-    print("Current:", current_lowest)
-    print("Lowest seen:", lowest_seen)
-    print("Last alerted:", last_alerted)
-
-    if current_lowest is None:
-        print("No price found")
-        return
+    print(f"📌 Lowest seen: {lowest_seen}")
+    print(f"📌 Last alerted: {last_alerted}")
 
     # update lowest seen
     if lowest_seen is None or current_lowest < lowest_seen:
