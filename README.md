@@ -95,3 +95,9 @@ Workflow
 - Current price is below the defined threshold
 - AND the price is lower than the last alerted value
 
+### This ensures:
+
+- No duplicate alerts
+- Only meaningful price drops are notified
+## Configuration
+
