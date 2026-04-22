@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
-      - run: python tracker.py
+      - name: Run script
         env:
           EMAIL: ${{ secrets.EMAIL }}
           APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
