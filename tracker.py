@@ -88,22 +88,6 @@ def get_lowest_price(data):
     return lowest, best_plan
 
 
-# ---------------- STATE (GitHub-safe) ----------------
-def load_state():
-    try:
-        return json.load(open(STATE_FILE))
-    except:
-        return {
-            "lowest_seen": None,
-            "last_alerted": None
-        }
-
-
-def save_state(state):
-    with open(STATE_FILE, "w") as f:
-        json.dump(state, f)
-
-
 # ---------------- MAIN ----------------
 def main():
     data = fetch_data()
