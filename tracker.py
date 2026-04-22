@@ -40,7 +40,7 @@ def send_email_alert(message):
         print("Email error:", e)
 
 
-# ---------------- FETCH DATA ----------------
+# ---------------- FETCH ----------------
 def fetch_data():
     try:
         print("🌐 Fetching API...")
