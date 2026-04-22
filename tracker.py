@@ -97,7 +97,21 @@ def main():
 
     current_lowest, plan = get_lowest_price(data)
 
-    state = load_state()
+    print(f"📊 Current lowest: {current_lowest} | Plan: {plan}")
+
+    if current_lowest is None:
+        print("❌ No valid price found")
+        return
+
+    # Load state from GitHub runner (NOT persistent across runs, but OK for logic)
+    state_file = "state.json"
+
+    try:
+        with open(state_file, "r") as f:
+            state = json.load(f)
+    except:
+        state = {"lowest_seen": None, "last_alerted": None}
+
     lowest_seen = state.get("lowest_seen")
     last_alerted = state.get("last_alerted")
 
