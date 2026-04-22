@@ -91,6 +91,10 @@ def get_lowest_price(data):
 # ---------------- MAIN ----------------
 def main():
     data = fetch_data()
+    if not data:
+        print("❌ No data, exiting")
+        return
+
     current_lowest, plan = get_lowest_price(data)
 
     state = load_state()
