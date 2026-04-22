@@ -111,3 +111,14 @@ THRESHOLD → Minimum price trigger for alerts
 THRESHOLD = 700
 State Management
 ```
+### The script maintains a lightweight state file:
+
+state.json
+
+### This stores:
+
+- Lowest price seen
+- Last alerted price
+
+This helps prevent repeated alerts for the same price level.
+
