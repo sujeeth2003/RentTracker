@@ -41,3 +41,16 @@ RentTracker/
         └── workflows/
             └── run.yml          # GitHub Actions workflow
 
+## Setup Instructions
+
+1. Clone Repository
+
+```
+git clone https://github.com/<your-username>/RentTracker.git
+cd RentTracker
+```
+
+3. Install Dependencies
+```pip install -r requirements.txt```
+4. Configure Environment Variables
+
