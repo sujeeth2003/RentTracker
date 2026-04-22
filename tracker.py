@@ -43,7 +43,7 @@ def send_email_alert(message):
 # ---------------- FETCH ----------------
 def fetch_data():
     try:
-        print("🌐 Fetching API...")
+        print("Fetching API...")
 
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36",
