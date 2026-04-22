@@ -136,6 +136,7 @@ Threshold: {THRESHOLD}
 Lowest Seen: {lowest_seen}
 Time: {datetime.now()}
 """
+
             send_email_alert(message)
             last_alerted = current_lowest
         else:
