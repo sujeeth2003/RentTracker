@@ -125,6 +125,8 @@ def main():
     # alert logic
     if current_lowest < THRESHOLD:
         if last_alerted is None or current_lowest < last_alerted:
+            print("🚨 New alert triggered!")
+
             message = f"""
 New rent opportunity detected!
 
