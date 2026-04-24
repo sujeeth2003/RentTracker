@@ -69,7 +69,7 @@ def safe_int(x):
         return None
 
 
-# ---------------- EXTRACT LOWEST PRICE ----------------
+# ---------------- EXTRACT ----------------
 def get_lowest_price(data):
     lowest = None
     best_plan = None
