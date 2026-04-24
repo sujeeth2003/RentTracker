@@ -57,7 +57,7 @@ def fetch_data():
         return r.json()
 
     except Exception as e:
-        print("❌ API fetch error:", e)
+        print("API fetch error:", e)
         return None
 
 
