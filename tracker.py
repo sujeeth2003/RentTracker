@@ -135,23 +135,6 @@ def get_lowest_price(data):
     return lowest, best_plan
 
 
-# ---------------- STATE ----------------
-def load_state():
-    if not os.path.exists(STATE_FILE):
-        return {"lowest_seen": None, "last_alerted": None}
-
-    try:
-        with open(STATE_FILE, "r") as f:
-            return json.load(f)
-    except:
-        return {"lowest_seen": None, "last_alerted": None}
-
-
-def save_state(state):
-    with open(STATE_FILE, "w") as f:
-        json.dump(state, f)
-
-
 # ---------------- MAIN ----------------
 def main():
     data = fetch_data()
