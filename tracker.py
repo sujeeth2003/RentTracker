@@ -21,7 +21,7 @@ GOOGLE_SHEET_NAME = "Rent Tracker"
 GOOGLE_CREDS_FILE = "credentials.json"
 
 if not EMAIL or not APP_PASSWORD:
-    print("Missing EMAIL or APP_PASSWORD environment variables")
+    print("❌ Missing EMAIL or APP_PASSWORD env variables")
     exit(1)
 
 print("Environment variables loaded")
