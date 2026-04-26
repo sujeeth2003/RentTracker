@@ -127,7 +127,7 @@ def get_lowest_price(data):
 
                 final_price = special if special else price
 
-                if final_price is not None:
+                if final_price:
                     if lowest is None or final_price < lowest:
                         lowest = final_price
                         best_plan = f"{category} - {name}"
