@@ -5,7 +5,10 @@ import smtplib
 from email.mime.text import MIMEText
 from datetime import datetime
 
-print("SCRIPT STARTED")
+import gspread
+from google.oauth2.service_account import Credentials
+
+print("🚀 SCRIPT STARTED")
 
 # ---------------- CONFIG ----------------
 URL = "https://www.liveparksideapartments.com/wp-json/theme/entrata/v1/floor-plans"
