@@ -144,7 +144,7 @@ def main():
 
     current_lowest, plan = get_lowest_price(data)
 
-    print(f"Current lowest: {current_lowest} | Plan: {plan}")
+    print(f"📊 Current lowest: {current_lowest} | Plan: {plan}")
 
     if current_lowest is None:
         print("No valid price found")
