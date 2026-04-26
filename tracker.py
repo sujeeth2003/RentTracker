@@ -108,6 +108,11 @@ def load_state():
         return {"lowest_seen": None, "last_alerted": None}
 
 
+def save_state(state):
+    with open(STATE_FILE, "w") as f:
+        json.dump(state, f)
+
+
 # ---------------- MAIN ----------------
 def main():
     data = fetch_data()
