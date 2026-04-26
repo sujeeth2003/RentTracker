@@ -70,7 +70,7 @@ def send_email_alert(message):
             server.login(EMAIL, APP_PASSWORD)
             server.send_message(msg)
 
-        print("Email sent")
+        print("📧 Email sent successfully")
 
     except Exception as e:
         print("Email error:", e)
