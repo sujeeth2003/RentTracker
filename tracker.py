@@ -171,7 +171,10 @@ Time: {datetime.now()}
         "last_alerted": last_alerted
     })
 
-    print("💾 State updated")
+    print("State updated")
+
+    if not alert_sent:
+        print("No alert sent this run")
 
 
 if __name__ == "__main__":
