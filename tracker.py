@@ -126,7 +126,7 @@ def main():
     print(f"Current lowest: {current_lowest} | Plan: {plan}")
 
     if current_lowest is None:
-        print("❌ No valid price found")
+        print("No valid price found")
         return
 
     # Load state from GitHub runner (NOT persistent across runs, but OK for logic)
