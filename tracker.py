@@ -73,7 +73,7 @@ def send_email_alert(message):
         print("📧 Email sent successfully")
 
     except Exception as e:
-        print("Email error:", e)
+        print("❌ Email failed:", e)
 
 
 # ---------------- FETCH ----------------
