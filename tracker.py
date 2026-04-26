@@ -24,7 +24,22 @@ if not EMAIL or not APP_PASSWORD:
     print("❌ Missing EMAIL or APP_PASSWORD env variables")
     exit(1)
 
-print("Environment variables loaded")
+print("✅ Environment variables loaded")
+
+
+# ---------------- GOOGLE SHEETS ----------------
+def init_sheet():
+    scope = [
+        "https://www.googleapis.com/auth/spreadsheets",
+        "https://www.googleapis.com/auth/drive"
+    ]
+
+    creds = Credentials.from_service_account_file(GOOGLE_CREDS_FILE, scopes=scope)
+    client = gspread.authorize(creds)
+
+    sheet = client.open(GOOGLE_SHEET_NAME).sheet1
+    return sheet
+
 
 
 # ---------------- EMAIL ----------------
