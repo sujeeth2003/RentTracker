@@ -116,6 +116,7 @@ def save_state(state):
 # ---------------- MAIN ----------------
 def main():
     data = fetch_data()
+
     if not data:
         print("❌ No data, exiting")
         return
