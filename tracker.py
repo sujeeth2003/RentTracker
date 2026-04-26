@@ -163,7 +163,7 @@ Time: {datetime.now()}
         else:
             print("Already alerted for this price level")
     else:
-        print("ℹ️ Price above threshold")
+        print("Price above threshold")
 
     # save state (for same-run tracking only)
     with open(state_file, "w") as f:
