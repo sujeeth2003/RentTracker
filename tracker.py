@@ -79,7 +79,7 @@ def send_email_alert(message):
 # ---------------- FETCH DATA ----------------
 def fetch_data():
     try:
-        print("Fetching API...")
+        print("🌐 Fetching API...")
 
         headers = {
             "User-Agent": "Mozilla/5.0",
