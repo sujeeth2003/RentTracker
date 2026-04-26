@@ -169,7 +169,6 @@ def main():
 
     alert_sent = False
 
-    # alert condition
     if current_lowest < THRESHOLD:
         if last_alerted is None or current_lowest < last_alerted:
             print("New alert triggered")
