@@ -138,7 +138,6 @@ def get_lowest_price(data):
 # ---------------- MAIN ----------------
 def main():
     data = fetch_data()
-
     if not data:
         print("No data received")
         return
