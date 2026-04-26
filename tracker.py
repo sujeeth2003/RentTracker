@@ -165,15 +165,11 @@ Time: {datetime.now()}
     else:
         print("Price above threshold")
 
-    # save state (for same-run tracking only)
-    with open(state_file, "w") as f:
-        json.dump(
-            {
-                "lowest_seen": lowest_seen,
-                "last_alerted": last_alerted,
-            },
-            f,
-        )
+    # save state
+    save_state({
+        "lowest_seen": lowest_seen,
+        "last_alerted": last_alerted
+    })
 
     print("💾 State updated")
 
