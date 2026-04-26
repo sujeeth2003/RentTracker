@@ -164,7 +164,6 @@ def main():
     print(f"📌 Lowest seen: {lowest_seen}")
     print(f"📌 Last alerted: {last_alerted}")
 
-    # update lowest seen
     if lowest_seen is None or current_lowest < lowest_seen:
         lowest_seen = current_lowest
 
