@@ -129,15 +129,7 @@ def main():
         print("No valid price found")
         return
 
-    # Load state from GitHub runner (NOT persistent across runs, but OK for logic)
-    state_file = "state.json"
-
-    try:
-        with open(state_file, "r") as f:
-            state = json.load(f)
-    except:
-        state = {"lowest_seen": None, "last_alerted": None}
-
+    state = load_state()
     lowest_seen = state.get("lowest_seen")
     last_alerted = state.get("last_alerted")
 
