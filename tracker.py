@@ -159,6 +159,7 @@ Time: {datetime.now()}
 
             send_email_alert(message)
             last_alerted = current_lowest
+            alert_sent = True
         else:
             print("ℹ️ Already alerted for this price level")
     else:
