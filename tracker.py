@@ -161,7 +161,7 @@ Time: {datetime.now()}
             last_alerted = current_lowest
             alert_sent = True
         else:
-            print("ℹ️ Already alerted for this price level")
+            print("Already alerted for this price level")
     else:
         print("ℹ️ Price above threshold")
 
