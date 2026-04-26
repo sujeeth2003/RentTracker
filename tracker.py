@@ -76,7 +76,7 @@ def send_email_alert(message):
         print("❌ Email failed:", e)
 
 
-# ---------------- FETCH ----------------
+# ---------------- FETCH DATA ----------------
 def fetch_data():
     try:
         print("Fetching API...")
