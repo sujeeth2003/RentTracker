@@ -118,7 +118,7 @@ def main():
     data = fetch_data()
 
     if not data:
-        print("❌ No data, exiting")
+        print("No data received")
         return
 
     current_lowest, plan = get_lowest_price(data)
