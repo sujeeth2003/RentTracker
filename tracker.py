@@ -171,7 +171,7 @@ def main():
 
     if current_lowest < THRESHOLD:
         if last_alerted is None or current_lowest < last_alerted:
-            print("New alert triggered")
+            print("🚨 New alert triggered!")
 
             message = f"""
 Rent Price Alert
