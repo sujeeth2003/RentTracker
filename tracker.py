@@ -174,7 +174,7 @@ def main():
             print("🚨 New alert triggered!")
 
             message = f"""
-Rent Price Alert
+Rent Price Alert 🚨
 
 Plan: {plan}
 Price: ${current_lowest}
