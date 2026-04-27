@@ -189,7 +189,11 @@ Time: {datetime.now()}
         else:
             print("ℹ️ Already alerted for this price level")
     else:
-        print("Price above threshold")
+        print("ℹ️ Price above threshold")
+
+    # ---------------- LOG TO GOOGLE SHEETS ----------------
+    status = "ALERT" if alert_sent else "NORMAL"
+    log_to_sheet(plan, current_lowest, status)
 
     # save state
     save_state({
