@@ -205,10 +205,7 @@ Time: {datetime.now()}
             f,
         )
 
-    print("State updated")
-
-    if not alert_sent:
-        print("No alert sent this run")
+    print("💾 State updated")
 
 
 if __name__ == "__main__":
