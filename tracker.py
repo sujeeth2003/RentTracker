@@ -4,7 +4,7 @@ import requests
 import smtplib
 from email.mime.text import MIMEText
 from datetime import datetime
-import json
+
 from google.oauth2.service_account import Credentials
 import gspread
 
