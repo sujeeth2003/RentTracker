@@ -196,10 +196,14 @@ Time: {datetime.now()}
     log_to_sheet(plan, current_lowest, status)
 
     # save state
-    save_state({
-        "lowest_seen": lowest_seen,
-        "last_alerted": last_alerted
-    })
+    with open(state_file, "w") as f:
+        json.dump(
+            {
+                "lowest_seen": lowest_seen,
+                "last_alerted": last_alerted,
+            },
+            f,
+        )
 
     print("State updated")
 
