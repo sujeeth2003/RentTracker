@@ -33,6 +33,8 @@ def init_sheet():
         "https://www.googleapis.com/auth/drive"
     ]
 
+    creds_json = json.loads(os.getenv("GOOGLE_CREDS_JSON"))
+    creds = Credentials.from_service_account_info(creds_json, scopes=scope)
 
 
     creds_json = json.loads(os.getenv("GOOGLE_CREDS_JSON"))
