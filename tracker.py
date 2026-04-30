@@ -50,6 +50,9 @@ def log_to_sheet(plan, price, status):
             price,
             status
         ])
+        print("📊 Logged to Google Sheets")
+    except Exception as e:
+        print("❌ Google Sheets logging failed:", e)
 
         print("📊 Logged to Google Sheets")
 
