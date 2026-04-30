@@ -207,17 +207,7 @@ Time: {datetime.now()}
     status = "ALERT" if alert_sent else "NORMAL"
     log_to_sheet(plan, current_lowest, status)
 
-    # save state
-    with open(state_file, "w") as f:
-        json.dump(
-            {
-                "lowest_seen": lowest_seen,
-                "last_alerted": last_alerted,
-            },
-            f,
-        )
-
-    print("💾 State updated")
+    print("💾 Done")
 
 
 if __name__ == "__main__":
