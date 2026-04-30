@@ -203,7 +203,7 @@ Time: {datetime.now()}
     else:
         print("ℹ️ No new lowest price")
 
-    # ---------------- LOG TO GOOGLE SHEETS ----------------
+    # ---------------- LOG ALWAYS ----------------
     status = "ALERT" if alert_sent else "NORMAL"
     log_to_sheet(plan, current_lowest, status)
 
