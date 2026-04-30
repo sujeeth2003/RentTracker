@@ -207,3 +207,8 @@ Time: {datetime.now()}
     status = "ALERT" if alert_sent else "NORMAL"
     log_to_sheet(plan, current_lowest, status)
 
+    print("💾 Done")
+
+
+if __name__ == "__main__":
+    main()
