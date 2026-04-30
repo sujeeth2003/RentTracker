@@ -177,20 +177,7 @@ def main():
     # ---------------- GET HISTORICAL LOW ----------------
     historical_low = get_history_low(sheet)
 
-    try:
-        with open(state_file, "r") as f:
-            state = json.load(f)
-    except:
-        state = {"lowest_seen": None, "last_alerted": None}
-
-    lowest_seen = state.get("lowest_seen")
-    last_alerted = state.get("last_alerted")
-
-    print(f"📌 Lowest seen: {lowest_seen}")
-    print(f"📌 Last alerted: {last_alerted}")
-
-    if lowest_seen is None or current_lowest < lowest_seen:
-        lowest_seen = current_lowest
+    print(f"📌 Historical lowest (sheet): {historical_low}")
 
     alert_sent = False
 
