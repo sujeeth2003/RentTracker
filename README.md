@@ -13,3 +13,18 @@ The system helps detect price changes early and avoids duplicate alerts by maint
 - Sends email notifications when a new lower price is detected
 - Prevents duplicate alerts using state tracking
 - Fully automated execution using GitHub Actions
+## Architecture
+
+### The system consists of:
+
+- Data Source
+- A public API providing apartment floor plans and pricing information.
+- Processing Layer
+- Python script that:
+  - Parses JSON data
+  - Extracts pricing information
+  - Identifies lowest available rent
+- Alerting Layer
+  - Email notifications sent via SMTP (Gmail)
+  - Scheduler
+  - GitHub Actions workflow running on a scheduled interval
