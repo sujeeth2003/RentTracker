@@ -181,9 +181,11 @@ def main():
 
     alert_sent = False
 
-    if current_lowest < THRESHOLD:
-        if last_alerted is None or current_lowest < last_alerted:
-            print("🚨 New alert triggered!")
+    # ---------------- ALERT LOGIC ----------------
+    if historical_low is None or current_lowest < historical_low:
+
+        if current_lowest < THRESHOLD:
+            print("🚨 New ALL-TIME LOW detected!")
 
             message = f"""
 Rent Price Alert 🚨
