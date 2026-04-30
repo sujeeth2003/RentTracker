@@ -98,3 +98,19 @@ def send_email_alert(message):
     except Exception as e:
         print("❌ Email failed:", e)
 
+
+# ---------------- FETCH DATA ----------------
+def fetch_data():
+    try:
+        print("🌐 Fetching API...")
+
+        headers = {
+            "User-Agent": "Mozilla/5.0",
+            "Accept": "application/json",
+            "Referer": "https://www.liveparksideapartments.com/floor-plans/",
+            "Origin": "https://www.liveparksideapartments.com"
+        }
+
+        r = requests.get(URL, headers=headers, timeout=10)
+        r.raise_for_status()
+
