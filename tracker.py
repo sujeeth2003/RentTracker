@@ -74,3 +74,11 @@ def get_history_low(sheet):
             except:
                 continue
 
+        return min(prices) if prices else None
+
+    except Exception as e:
+        print("❌ Failed reading sheet history:", e)
+        return None
+
+
+# ---------------- EMAIL ----------------
