@@ -123,3 +123,11 @@ def fetch_data():
 
 
 # ---------------- SAFE INT ----------------
+def safe_int(x):
+    try:
+        return int(x)
+    except:
+        return None
+
+
+# ---------------- EXTRACT LOWEST PRICE ----------------
