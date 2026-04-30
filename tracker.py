@@ -37,7 +37,6 @@ def init_sheet():
     creds = Credentials.from_service_account_info(creds_json, scopes=scope)
 
     client = gspread.authorize(creds)
-
     sheet = client.open(GOOGLE_SHEET_NAME).sheet1
     return sheet
 
