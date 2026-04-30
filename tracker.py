@@ -158,3 +158,19 @@ def get_lowest_price(data):
 
 
 # ---------------- MAIN ----------------
+def main():
+    sheet = init_sheet()
+
+    data = fetch_data()
+    if not data:
+        print("❌ No data, exiting")
+        return
+
+    current_lowest, plan = get_lowest_price(data)
+
+    print(f"📊 Current lowest: {current_lowest} | Plan: {plan}")
+
+    if current_lowest is None:
+        print("❌ No valid price found")
+        return
+
