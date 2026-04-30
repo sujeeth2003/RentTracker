@@ -27,3 +27,17 @@ print("✅ Environment variables loaded")
 
 
 # ---------------- GOOGLE SHEETS ----------------
+def init_sheet():
+    scope = [
+        "https://www.googleapis.com/auth/spreadsheets",
+        "https://www.googleapis.com/auth/drive"
+    ]
+
+    creds_json = json.loads(os.getenv("GOOGLE_CREDS_JSON"))
+    creds = Credentials.from_service_account_info(creds_json, scopes=scope)
+
+    client = gspread.authorize(creds)
+    sheet = client.open(GOOGLE_SHEET_NAME).sheet1
+    return sheet
+
+
