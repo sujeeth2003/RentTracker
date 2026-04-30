@@ -147,3 +147,14 @@ def get_lowest_price(data):
                 price = safe_int(rate.get("value"))
                 special = safe_int(rate.get("special_value"))
 
+                final_price = special if special else price
+
+                if final_price:
+                    if lowest is None or final_price < lowest:
+                        lowest = final_price
+                        best_plan = f"{category} - {name}"
+
+    return lowest, best_plan
+
+
+# ---------------- MAIN ----------------
