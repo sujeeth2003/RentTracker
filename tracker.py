@@ -77,7 +77,8 @@ def get_history_low(sheet):
         return min(prices) if prices else None
 
     except Exception as e:
-        print("❌ Google Sheets logging failed:", e)
+        print("❌ Failed reading sheet history:", e)
+        return None
 
 
 # ---------------- EMAIL ----------------
