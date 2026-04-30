@@ -121,3 +121,17 @@ state.json
 
 This helps prevent repeated alerts for the same price level.
 
+## Limitations
+- Depends on availability of external API
+- May require header adjustments if API introduces bot protection
+- State persistence depends on execution environment
+- GitHub Actions may have slight execution delays
+## Future Improvements
+- Add database storage for historical pricing
+- Add visualization dashboard (Streamlit or similar)
+- Support multiple apartment listings
+- Add Telegram or SMS notifications
+- Improve anomaly detection for pricing trends
+## License
+
+This project is for educational and personal use.
