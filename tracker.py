@@ -190,3 +190,20 @@ def main():
             message = f"""
 Rent Price Alert 🚨
 
+Plan: {plan}
+Price: ${current_lowest}
+Threshold: {THRESHOLD}
+Previous Lowest (Sheet): {historical_low}
+Time: {datetime.now()}
+"""
+
+            send_email_alert(message)
+            alert_sent = True
+
+    else:
+        print("ℹ️ No new lowest price")
+
+    # ---------------- LOG ALWAYS ----------------
+    status = "ALERT" if alert_sent else "NORMAL"
+    log_to_sheet(plan, current_lowest, status)
+
