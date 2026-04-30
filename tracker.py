@@ -54,7 +54,27 @@ def log_to_sheet(plan, price, status):
     except Exception as e:
         print("❌ Google Sheets logging failed:", e)
 
-        print("📊 Logged to Google Sheets")
+
+def get_history_low(sheet):
+    """
+    Reads all prices from sheet and finds historical lowest price.
+    Column format:
+    0 timestamp | 1 plan | 2 price | 3 status
+    """
+    try:
+        records = sheet.get_all_values()
+
+        if len(records) <= 1:
+            return None  # only header or empty
+
+        prices = []
+        for row in records[1:]:
+            try:
+                prices.append(int(row[2]))
+            except:
+                continue
+
+        return min(prices) if prices else None
 
     except Exception as e:
         print("❌ Google Sheets logging failed:", e)
