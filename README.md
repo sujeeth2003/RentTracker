@@ -75,3 +75,15 @@ The project is configured to run automatically using GitHub Actions.
 
 Schedule
 
+### Runs every hour using a cron job:
+```
+0 * * * *
+Workflow
+```
+## The workflow:
+
+- Sets up Python environment
+- Installs dependencies
+- Executes tracker script
+- Sends email if conditions are met
+
