@@ -174,7 +174,8 @@ def main():
         print("❌ No valid price found")
         return
 
-    state_file = "state.json"
+    # ---------------- GET HISTORICAL LOW ----------------
+    historical_low = get_history_low(sheet)
 
     try:
         with open(state_file, "r") as f:
