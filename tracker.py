@@ -193,7 +193,7 @@ Rent Price Alert 🚨
 Plan: {plan}
 Price: ${current_lowest}
 Threshold: {THRESHOLD}
-Lowest Seen: {lowest_seen}
+Previous Lowest (Sheet): {historical_low}
 Time: {datetime.now()}
 """
 
