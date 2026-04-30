@@ -174,3 +174,19 @@ def main():
         print("❌ No valid price found")
         return
 
+    # ---------------- GET HISTORICAL LOW ----------------
+    historical_low = get_history_low(sheet)
+
+    print(f"📌 Historical lowest (sheet): {historical_low}")
+
+    alert_sent = False
+
+    # ---------------- ALERT LOGIC ----------------
+    if historical_low is None or current_lowest < historical_low:
+
+        if current_lowest < THRESHOLD:
+            print("🚨 New ALL-TIME LOW detected!")
+
+            message = f"""
+Rent Price Alert 🚨
+
