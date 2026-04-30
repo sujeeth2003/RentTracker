@@ -66,3 +66,12 @@ Repository → Settings → Secrets and variables → Actions → New repository
 ```
 Running Locally
 
+### To test the script manually:
+```
+python tracker.py
+GitHub Actions Automation
+```
+The project is configured to run automatically using GitHub Actions.
+
+Schedule
+
