@@ -41,3 +41,17 @@ def init_sheet():
     return sheet
 
 
+def log_to_sheet(plan, price, status):
+    try:
+        sheet = init_sheet()
+        sheet.append_row([
+            str(datetime.now()),
+            plan,
+            price,
+            status
+        ])
+        print("📊 Logged to Google Sheets")
+    except Exception as e:
+        print("❌ Google Sheets logging failed:", e)
+
+
