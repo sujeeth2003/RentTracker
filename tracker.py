@@ -199,8 +199,7 @@ Time: {datetime.now()}
 
             send_email_alert(message)
             alert_sent = True
-        else:
-            print("ℹ️ Already alerted for this price level")
+
     else:
         print("ℹ️ Price above threshold")
 
