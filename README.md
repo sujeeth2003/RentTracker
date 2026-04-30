@@ -53,3 +53,16 @@ cd RentTracker
 ```pip install -r requirements.txt```
 4. Configure Environment Variables
 
+### This project requires the following GitHub Secrets:
+```
+EMAIL: Your Gmail address
+APP_PASSWORD: Gmail app password
+```
+#### To set them:
+
+Go to
+```
+Repository → Settings → Secrets and variables → Actions → New repository secret
+```
+Running Locally
+
