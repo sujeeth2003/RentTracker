@@ -87,3 +87,10 @@ Workflow
 - Executes tracker script
 - Sends email if conditions are met
 
+## Alert Logic
+
+### An email alert is triggered only when:
+
+- Current price is below the defined threshold
+- AND the price is lower than the last alerted value
+
