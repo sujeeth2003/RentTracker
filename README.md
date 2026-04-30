@@ -100,3 +100,13 @@ Workflow
 - Only meaningful price drops are notified
 ## Configuration
 
+### Inside tracker.py:
+```
+URL → API endpoint for floor plan data
+THRESHOLD → Minimum price trigger for alerts
+```
+#### Example:
+```
+THRESHOLD = 700
+State Management
+```
