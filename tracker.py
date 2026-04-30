@@ -201,7 +201,7 @@ Time: {datetime.now()}
             alert_sent = True
 
     else:
-        print("ℹ️ Price above threshold")
+        print("ℹ️ No new lowest price")
 
     # ---------------- LOG TO GOOGLE SHEETS ----------------
     status = "ALERT" if alert_sent else "NORMAL"
