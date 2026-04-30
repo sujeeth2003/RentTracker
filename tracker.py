@@ -44,7 +44,6 @@ def init_sheet():
 def log_to_sheet(plan, price, status):
     try:
         sheet = init_sheet()
-
         sheet.append_row([
             str(datetime.now()),
             plan,
